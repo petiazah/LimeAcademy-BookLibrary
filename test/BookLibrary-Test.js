@@ -42,18 +42,6 @@ describe("BookLibrary", function () {
        
         assert(counter, 3); // NOBODY
       });
-
-      it("Add book copies", async () => {
-
-        const { LibraryContract, owner } = await loadFixture(deployBookLibraryFixture);
-        await LibraryContract.connect(owner).addBook(bookName, 2);
-        const availableBookBNArray = await LibraryContract.getAvailableBooks();
-        const avlBook = availableBookBNArray.map((item) => item.toNumber());
-        await LibraryContract.connect(owner).addBookCopies(avlBook[0], 3)
-        const { 1: totalCount } = await LibraryContract.getBookDetail(avlBook[0]);
-        assert.equal(totalCount.toNumber(), 5);
-        
-      });
     
     it("Borrow book", async () => {
         const { LibraryContract, owner, addr1, addr2,addr3 } = await loadFixture(deployBookLibraryFixture);
@@ -80,8 +68,15 @@ describe("BookLibrary", function () {
         const avlBook = availableBookBNArray.map((item) => item.toNumber());
         await LibraryContract.connect(addr1).borrowBook(avlBook[0]);
         await LibraryContract.connect(addr2).borrowBook(avlBook[0]);
-        const { 1: avlCopies } = await LibraryContract.getBookDetail(avlBook[0]);
+        var { 1: avlCopies } = await LibraryContract.getBookDetail(avlBook[0]);
         assert.equal(avlCopies.toNumber(), 0);
+       
+        await LibraryContract.connect(addr1).returnBook(avlBook[0]);
+        await LibraryContract.connect(addr2).returnBook(avlBook[0]);
+        var { 1: avlCopies } = await LibraryContract.getBookDetail(avlBook[0]);
+        assert.equal(avlCopies.toNumber(), 2);
+        
+
       
     
       });
@@ -104,9 +99,9 @@ describe("BookLibrary", function () {
         await LibraryContract.connect(addr3).returnBook(avlBook[0]);
         assert.equal(avlCopies.toNumber(), 0);
         const data = await LibraryContract.getOwnerHistoryOfBook(avlBook[0]);
-        // console.log(data);
+        
         const result = [addr1, addr2, addr3];
-        // console.log(result);
+       
         assert.equal(data.length, result.length);
         assert.equal(data[0], result[0].address);
         assert.equal(data[1], result[1].address);

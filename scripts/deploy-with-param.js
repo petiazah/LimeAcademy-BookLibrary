@@ -12,7 +12,7 @@ async function deployBookLibrary(_privateKey) {
     console.log('Waiting for BookLibrary deployment...');
     await bookLibraryContract.deployed();
 
-    console.log('USElection Contract address: ', bookLibraryContract.address);
+    console.log('Booklibrary Contract address: ', bookLibraryContract.address);
     console.log('Done!');
 }
   
