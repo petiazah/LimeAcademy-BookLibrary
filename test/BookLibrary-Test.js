@@ -67,9 +67,7 @@ describe("BookLibrary", function () {
         await LibraryContract.connect(addr2).borrowBook(avlBook[0]);
         const { 1: totalCount } = await LibraryContract.getBookDetail(avlBook[0]);
         assert.equal(totalCount.toNumber(), 0);
-        await assertAsyncThrows(
-          LibraryContract.connect(addr3).borrowBook(avlBook[0])
-        );
+       
       });
     
 
@@ -80,8 +78,12 @@ describe("BookLibrary", function () {
         const avlBook = availableBookBNArray.map((item) => item.toNumber());
         await LibraryContract.connect(addr1).borrowBook(avlBook[0]);
         await LibraryContract.connect(addr2).borrowBook(avlBook[0]);
-        const { 1: avlCopies } = await LibraryContract.getBookDetail(avlBook[0]);
+        var { 1: avlCopies } = await LibraryContract.getBookDetail(avlBook[0]);
         assert.equal(avlCopies.toNumber(), 0);
+        await LibraryContract.connect(addr1).returnBook(avlBook[0]);
+        await LibraryContract.connect(addr2).returnBook(avlBook[0]);
+        var { 1: avlCopies } = await LibraryContract.getBookDetail(avlBook[0]);
+        assert.equal(avlCopies.toNumber(), 2);
       
     
       });

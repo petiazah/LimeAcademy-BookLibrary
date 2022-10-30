@@ -16,15 +16,16 @@ async function deployBookLibrary(args) {
   console.log('BookLibrary Contract address: ', bookLibrary.address);
   await hre.run("verify:verify", {
     address: bookLibrary.address,
+  
   });
 
 }
 
-// deployBookLibrary()
-//   .then(() => process.exit(0))
-//   .catch((error) => {
-//     console.error(error);
-//     process.exit(1);
-//   }); // Calling the function to deploy the contract 
+deployBookLibrary()
+  .then(() => process.exit(0))
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  }); // Calling the function to deploy the contract 
 
 module.exports = deployBookLibrary;
